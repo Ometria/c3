@@ -173,7 +173,7 @@
 
         // configuration for no plot-able data supplied.
         var __data_empty_label_text = getConfig(['data', 'empty', 'label', 'text'], "");
-        
+
         // subchart
         var __subchart_show = getConfig(['subchart', 'show'], false),
             __subchart_size_height = getConfig(['subchart', 'size', 'height'], 60),
@@ -253,7 +253,9 @@
             __point_r = getConfig(['point', 'r'], 2.5),
             __point_focus_expand_enabled = getConfig(['point', 'focus', 'expand', 'enabled'], true),
             __point_focus_expand_r = getConfig(['point', 'focus', 'expand', 'r']),
-            __point_select_r = getConfig(['point', 'focus', 'select', 'r']);
+            __point_select_r = getConfig(['point', 'focus', 'select', 'r']),
+            __point_paint_prop = getConfig(['point', 'paintProperty'], 'fill');
+
 
         var __line_connect_null = getConfig(['line', 'connect_null'], false);
 
@@ -3789,10 +3791,11 @@
                 mainCircle.enter().append("circle")
                     .attr("class", classCircle)
                     .attr("r", pointR)
-                    .style("fill", color);
+                    .style(__point_paint_prop, color);
                 mainCircle
                     .style("opacity", initialOpacity);
                 mainCircle.exit().remove();
+
             }
 
             if (hasDataLabel()) {
@@ -4066,7 +4069,7 @@
                     .style("opacity", orgAreaOpacity));
                 transitions.push(mainCircle.transition()
                     .style('opacity', opacityForCircle)
-                    .style("fill", color)
+                    .style(__point_paint_prop, color)
                     .attr("cx", __axis_rotated ? circleY : circleX)
                     .attr("cy", __axis_rotated ? circleX : circleY));
                 transitions.push(main.selectAll('.' + CLASS.selectedCircle).transition()
@@ -5309,6 +5312,16 @@
             if (arguments.length) {
                 if (typeof range.max !== 'undefined') { c3.axis.max(range.max); }
                 if (typeof range.min !== 'undefined') { c3.axis.min(range.min); }
+            }
+        };
+
+        c3.axis.setFormatters = function (axisFormatters) {
+            for (var axis in axisFormatters) {
+                if (axis === 'y') {
+                    __axis_y_tick_format = axisFormatters[axis];
+                } else if (axis === 'x') {
+                    __axis_x_tick_format = axisFormatters[axis];
+                }
             }
         };
 
