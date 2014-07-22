@@ -2,7 +2,7 @@
     'use strict';
 
     /*global define, module, exports, require */
- 
+
     var c3 = {
         version: "0.2.4"
     };
@@ -294,7 +294,7 @@
             __donut_title = getConfig(['donut', 'title'], "");
 
         // region - region to change style
-        var __regions = getConfig(['regions'], []);
+        var __regions = getConfig(['regions'],  []);
 
         // tooltip - show when mouseover on each data
         var __tooltip_show = getConfig(['tooltip', 'show'], true),
