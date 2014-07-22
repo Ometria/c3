@@ -2,6 +2,7 @@
     'use strict';
 
     /*global define, module, exports, require */
+// test
 
     var c3 = {
         version: "0.2.4"
