@@ -272,7 +272,7 @@
         var __pie_label_show = getConfig(['pie', 'label', 'show'], true),
             __pie_label_format = getConfig(['pie', 'label', 'format']),
             __pie_label_threshold = getConfig(['pie', 'label', 'threshold'], 0.05),
-            __pie_sort = getConfig(['pie', 'sort'], true),
+            __pie_sort = getConfig(['pie', 'sort'], false),
             __pie_expand = getConfig(['pie', 'expand'], true);
 
         // gauge
@@ -1030,6 +1030,10 @@
         });
         if (!__data_order || !__pie_sort || !__donut_sort) {
             pie.sort(null);
+        }
+
+        if (__pie_sort) {
+            pie.sort(__pie_sort);
         }
 
         function descByStartAngle(a, b) {
@@ -5097,13 +5101,14 @@
             );
         };
 
-        c3.select = function (ids, indices, resetOther) {
-            if (! __data_selection_enabled) { return; }
+        c3.select = function (ids, indices, resetOther, apiSelect) {
+            if (! __data_selection_enabled && !apiSelect) { return; }
             main.selectAll('.' + CLASS.shapes).selectAll('.' + CLASS.shape).each(function (d, i) {
                 var shape = d3.select(this), id = d.data ? d.data.id : d.id, toggle = getToggle(this),
                     isTargetId = __data_selection_grouped || !ids || ids.indexOf(id) >= 0,
                     isTargetIndex = !indices || indices.indexOf(i) >= 0,
                     isSelected = shape.classed(CLASS.SELECTED);
+
                 // line/area selection not supported yet
                 if (shape.classed(CLASS.line) || shape.classed(CLASS.area)) {
                     return;
@@ -5120,8 +5125,8 @@
             });
         };
 
-        c3.unselect = function (ids, indices) {
-            if (! __data_selection_enabled) { return; }
+        c3.unselect = function (ids, indices, apiSelect) {
+            if (! __data_selection_enabled && !apiSelect) { return; }
             main.selectAll('.' + CLASS.shapes).selectAll('.' + CLASS.shape).each(function (d, i) {
                 var shape = d3.select(this), id = d.data ? d.data.id : d.id, toggle = getToggle(this),
                     isTargetId = __data_selection_grouped || !ids || ids.indexOf(id) >= 0,
@@ -5319,10 +5324,18 @@
             for (var axis in axisFormatters) {
                 if (axis === 'y') {
                     __axis_y_tick_format = axisFormatters[axis];
+                } else if (axis === 'y2') {
+                    __axis_y2_tick_format = axisFormatters[axis];
                 } else if (axis === 'x') {
                     __axis_x_tick_format = axisFormatters[axis];
                 }
             }
+        };
+
+        c3.axis.xIndexToCoordinate = function (index) {
+            return +getYAxisClipWidth() +
+                    +(d3.selectAll('rect.c3-event-rect.c3-event-rect-' + index).attr('x'))
+                    + ((index) ? 0 : -20); // point x = 0 has a weird +20px position
         };
 
         c3.legend.show = function (targetIds) {
