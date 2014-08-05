@@ -294,7 +294,7 @@
             __donut_title = getConfig(['donut', 'title'], "");
 
         // region - region to change style
-        var __regions = getConfig(['regions'], []);
+        var __regions = getConfig(['regions'],  []);
 
         // tooltip - show when mouseover on each data
         var __tooltip_show = getConfig(['tooltip', 'show'], true),
