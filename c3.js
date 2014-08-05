@@ -3808,7 +3808,7 @@
                     .style("fill", color)
                     .style("fill-opacity", 0);
                 mainText
-                    .text(function (d) { return formatByAxisId(getAxisId(d.id))(d.value, d.id); });
+                    .text(function (d) { return formatByAxisId(getAxisId(d.id))(d.value, d.id, d); });
                 mainText.exit()
                   .transition().duration(durationForExit)
                     .style('fill-opacity', 0)
