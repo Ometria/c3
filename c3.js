@@ -2013,10 +2013,10 @@
         }
 
         function isOrderDesc() {
-            return __data_order && __data_order.toLowerCase() === 'desc';
+            return __data_order && __data_order.toLowerCase && __data_order.toLowerCase() === 'desc';
         }
         function isOrderAsc() {
-            return __data_order && __data_order.toLowerCase() === 'asc';
+            return __data_order && __data_order.toLowerCase && __data_order.toLowerCase() === 'asc';
         }
         function orderTargets(targets) {
             var orderAsc = isOrderAsc(), orderDesc = isOrderDesc();
