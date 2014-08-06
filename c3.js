@@ -1837,7 +1837,7 @@
         function classArcs(d) { return classShapes(d.data) + generateClass(CLASS.arcs, d.data.id); }
         function classArea(d) { return classShape(d) + generateClass(CLASS.area, d.id); }
         function classAreas(d) { return classShapes(d) + generateClass(CLASS.areas, d.id); }
-        function classRegion(d, i) { return generateClass(CLASS.region, i) + ' ' + ('class' in d ? d.class : ''); }
+        function classRegion(d, i) { return generateClass(CLASS.region, i) + ' ' + ('class' in d ? d['class'] : ''); }
         function classEvent(d) { return generateClass(CLASS.eventRect, d.index); }
         function classTarget(id) {
             var additionalClassSuffix = __data_classes[id], additionalClass = '';
@@ -3678,7 +3678,7 @@
                 .data(__grid_x_lines);
             // enter
             xgridLine = xgridLines.enter().append('g')
-                .attr("class", function (d) { return CLASS.xgridLine + (d.class ? ' ' + d.class : ''); });
+                .attr("class", function (d) { return CLASS.xgridLine + (d['class'] ? ' ' + d['class'] : ''); });
             xgridLine.append('line')
                 .style("opacity", 0);
             xgridLine.append('text')
@@ -3711,7 +3711,7 @@
                     .data(__grid_y_lines);
                 // enter
                 ygridLine = ygridLines.enter().append('g')
-                    .attr("class", function (d) { return CLASS.ygridLine + (d.class ? ' ' + d.class : ''); });
+                    .attr("class", function (d) { return CLASS.ygridLine + (d['class'] ? ' ' + d['class'] : ''); });
                 ygridLine.append('line')
                     .style("opacity", 0);
                 ygridLine.append('text')
@@ -4789,7 +4789,7 @@
             return params ? function (line) {
                 var found = false;
                 [].concat(params).forEach(function (param) {
-                    if ((('value' in param && line.value === params.value) || ('class' in param && line.class === params.class))) {
+                    if ((('value' in param && line.value === params.value) || ('class' in param && line['class'] === params['class']))) {
                         found = true;
                     }
                 });
@@ -5212,10 +5212,10 @@
 
             __regions = __regions.filter(function (region) {
                 var found = false;
-                if (!region.class) {
+                if (!region['class']) {
                     return true;
                 }
-                region.class.split(' ').forEach(function (c) {
+                region['class'].split(' ').forEach(function (c) {
                     if (classes.indexOf(c) >= 0) { found = true; }
                 });
                 return !found;
