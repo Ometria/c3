@@ -2013,10 +2013,10 @@
         }
 
         function isOrderDesc() {
-            return __data_order && __data_order.toLowerCase() === 'desc';
+            return __data_order && __data_order.toLowerCase && __data_order.toLowerCase() === 'desc';
         }
         function isOrderAsc() {
-            return __data_order && __data_order.toLowerCase() === 'asc';
+            return __data_order && __data_order.toLowerCase && __data_order.toLowerCase() === 'asc';
         }
         function orderTargets(targets) {
             var orderAsc = isOrderAsc(), orderDesc = isOrderDesc();
@@ -3812,7 +3812,7 @@
                     .style("fill", color)
                     .style("fill-opacity", 0);
                 mainText
-                    .text(function (d) { return formatByAxisId(getAxisId(d.id))(d.value, d.id); });
+                    .text(function (d) { return formatByAxisId(getAxisId(d.id))(d.value, d.id, d); });
                 mainText.exit()
                   .transition().duration(durationForExit)
                     .style('fill-opacity', 0)
