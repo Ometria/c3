@@ -3531,7 +3531,7 @@
             var mainLine, mainArea, mainCircle, mainBar, mainArc, mainRegion, mainText, contextLine,  contextArea, contextBar, eventRect, eventRectUpdate;
             var areaIndices = getShapeIndices(isAreaType), barIndices = getShapeIndices(isBarType), lineIndices = getShapeIndices(isLineType), maxDataCountTarget, tickOffset;
             var rectX, rectW;
-            var withY, withSubchart, withTransition, withTransitionForExit, withTransitionForAxis, withTransform, withUpdateXDomain, withUpdateOrgXDomain, withLegend;
+            var withY, withSubchart, withTransition, withTransitionForExit, withTransitionForAxis, withTransform, withTransitionForTransform, withUpdateXDomain, withUpdateOrgXDomain, withLegend;
             var hideAxis = hasArcType(c3.data.targets);
             var drawArea, drawAreaOnSub, drawBar, drawBarOnSub, drawLine, drawLineOnSub, xForText, yForText;
             var duration, durationForExit, durationForAxis, waitForDraw;
@@ -3549,6 +3549,7 @@
             withLegend = getOption(options, "withLegend", false);
             withTransitionForExit = getOption(options, "withTransitionForExit", withTransition);
             withTransitionForAxis = getOption(options, "withTransitionForAxis", withTransition);
+            withTransitionForTransform = getOption(options, "withTransitionForTransform", options.withTransition);
 
             duration = withTransition ? __transition_duration : 0;
             durationForExit = withTransitionForExit ? duration : 0;
@@ -3559,6 +3560,12 @@
             // update legend and transform each g
             if (withLegend && __legend_show) {
                 updateLegend(mapToIds(c3.data.targets), options, transitions);
+            } else {
+                // if no legend, call updateScales anyway to set axs formatters @changed
+                updateSizes();
+                updateScales();
+                updateSvgSize();
+                transformAll(withTransitionForTransform, transitions);
             }
 
             // MEMO: needed for grids calculation
@@ -5332,10 +5339,8 @@
             }
         };
 
-        c3.axis.xIndexToCoordinate = function (index) {
-            return +getYAxisClipWidth() +
-                    +(d3.selectAll('rect.c3-event-rect.c3-event-rect-' + index).attr('x'))
-                    + ((index) ? 0 : -20); // point x = 0 has a weird +20px position
+        c3.axis.getYAxisWidth = function () {
+            return getYAxisClipWidth();
         };
 
         c3.legend.show = function (targetIds) {
