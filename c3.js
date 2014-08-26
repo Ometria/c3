@@ -5228,6 +5228,8 @@
                 return !found;
             });
 
+            if(!options.classes) __regions = [];
+
             return __regions;
         };
 
