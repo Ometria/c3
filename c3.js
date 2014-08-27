@@ -4952,10 +4952,12 @@
             }
         };
 
-        c3.unload = function (args) {
+        c3.unload = function (args, silent) {
             args = args || {};
             unload(mapToTargetIds(args.ids), function () {
-                redraw({withUpdateOrgXDomain: true, withUpdateXDomain: true, withLegend: true});
+                if (!silent) {
+                    redraw({withUpdateOrgXDomain: true, withUpdateXDomain: true, withLegend: true});
+                }
                 if (typeof args.done === 'function') { args.done(); }
             });
         };
@@ -5241,20 +5243,24 @@
             var targets = c3.data.targets.filter(function (t) { return t.id === targetId; });
             return targets.length > 0 ? targets[0] : undefined;
         };
-        c3.data.names = function (names) {
+        c3.data.names = function (names, silent) {
             if (!arguments.length) { return __data_names; }
             Object.keys(names).forEach(function (id) {
                 __data_names[id] = names[id];
             });
-            redraw({withLegend: true});
+            if (!silent) {
+                redraw({withLegend: true});
+            }
             return __data_names;
         };
-        c3.data.colors = function (colors) {
+        c3.data.colors = function (colors, silent) {
             if (!arguments.length) { return __data_colors; }
             Object.keys(colors).forEach(function (id) {
                 __data_colors[id] = colors[id];
             });
-            redraw({withLegend: true});
+            if (!silent) {
+                redraw({withLegend: true});
+            }
             return __data_colors;
         };
 
