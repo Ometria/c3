@@ -282,7 +282,8 @@
             __gauge_min = getConfig(['gauge', 'min'], 0),
             __gauge_max = getConfig(['gauge', 'max'], 100),
             __gauge_units = getConfig(['gauge', 'units']),
-            __gauge_width = getConfig(['gauge', 'width']);
+            __gauge_width = getConfig(['gauge', 'width']),
+            __gauge_format = getConfig(['gauge', 'format'], function(d){ return d; });
 
         // donut
         var __donut_label_show = getConfig(['donut', 'label', 'show'], true),
@@ -3051,14 +3052,14 @@
                     .attr("class", CLASS.chartArcsGaugeMin)
                     .style("text-anchor", "middle")
                     .style("pointer-events", "none")
-                    .text(__gauge_label_show ? __gauge_min : '');
+                    .text(__gauge_label_show ? __gauge_format(__gauge_min) : '');
                 arcs.append("text")
                     .attr("dx", innerRadius + ((radius - innerRadius) / 2) + "px")
                     .attr("dy", "1.2em")
                     .attr("class", CLASS.chartArcsGaugeMax)
                     .style("text-anchor", "middle")
                     .style("pointer-events", "none")
-                    .text(__gauge_label_show ? __gauge_max : '');
+                    .text(__gauge_label_show ? __gauge_format(__gauge_max) : '');
             }
 
             main.select('.' + CLASS.chart).append("g")
@@ -5294,7 +5295,9 @@
             }
             return c3.data.xs;
         };
-
+        c3.axis.getXCoordinateFromValue = function(value){
+          return xv({value: value});
+        };
         c3.axis.labels = function (labels) {
             if (arguments.length) {
                 Object.keys(labels).forEach(function (axisId) {
@@ -5304,7 +5307,7 @@
             }
             // TODO: return some values?
         };
-        c3.axis.max = function (max) {
+        c3.axis.max = function (max, silent) {
             if (arguments.length) {
                 if (typeof max === 'object') {
                     if (isValue(max.x)) { __axis_x_max = max.x; }
@@ -5313,10 +5316,10 @@
                 } else {
                     __axis_y_max = __axis_y2_max = max;
                 }
-                redraw({withUpdateOrgXDomain: true, withUpdateXDomain: true});
+                if(!silent) redraw({withUpdateOrgXDomain: true, withUpdateXDomain: true});
             }
         };
-        c3.axis.min = function (min) {
+        c3.axis.min = function (min, silent) {
             if (arguments.length) {
                 if (typeof min === 'object') {
                     if (isValue(min.x)) { __axis_x_min = min.x; }
@@ -5325,13 +5328,13 @@
                 } else {
                     __axis_y_min = __axis_y2_min = min;
                 }
-                redraw({withUpdateOrgXDomain: true, withUpdateXDomain: true});
+                if(!silent) redraw({withUpdateOrgXDomain: true, withUpdateXDomain: true});
             }
         };
-        c3.axis.range = function (range) {
+        c3.axis.range = function (range, silent) {
             if (arguments.length) {
-                if (typeof range.max !== 'undefined') { c3.axis.max(range.max); }
-                if (typeof range.min !== 'undefined') { c3.axis.min(range.min); }
+                if (typeof range.max !== 'undefined') { c3.axis.max(range.max, silent); }
+                if (typeof range.min !== 'undefined') { c3.axis.min(range.min, silent); }
             }
         };
 
